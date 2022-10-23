@@ -3,63 +3,59 @@ import bolaAzul from "../assets/Images/BolaAzul.png";
 import parteBranca from "../assets/Images/Vector.png";
 
 import { useUser } from "../context/User";
-import NavBar from "../Components/NavBar";
-import HeaderHabits from "../Components/HeaderHabits";
-import NewHabits from "../Components/NewHabits";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import ListHabits from "../Components/ListHabits";
 import { Link } from "react-router-dom";
+import NavBar from "../Components/NavBar";
+import dayjs from "dayjs";
+import ListToday from "../Components/ListToday";
+
+const weekDays = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"]
 
 export default function HabitsPage() {
-  const [createNewHabit, setCreateNewHabit] = useState(false);
-  const [habitsList, setHabitList] = useState([]);
+  const { user, setUser } = useUser(undefined);
+
+  
+
 
   return (
-    <HabitsFull>
+    <TodayFull>
       <NavBar />
 
       <Main>
-        <HeaderHabits
-          createNewHabit={createNewHabit}
-          setCreateNewHabit={setCreateNewHabit}
-        />
+        <Header>
+          <h2>{weekDays[dayjs().day()]}, {dayjs().format("DD/MM")}</h2>
+          <p>Nenhum hábito concluído ainda</p>
+        </Header>
 
-        {createNewHabit === true ? (
-          <NewHabits
-            createNewHabit={createNewHabit}
-            setCreateNewHabit={setCreateNewHabit}
-            habitsList={habitsList}
-            setHabitList={setHabitList}
-          />
-        ) : (
-          ""
-        )}
+        <ListToday />
 
-        <ListHabits />
+        
       </Main>
 
       <Footer>
+        <Link to={"/habitos"}>
+
         <p>Hábitos</p>
+        </Link>
+        
         <LogoHoje>
           <BolaAzul src={bolaAzul} alt="bola azul" />
 
           <ParteBranca src={parteBranca} alt="parte branca" />
-          <Link to={"/hoje"}>
-            <p>Hoje</p>
-          </Link>
+          <p>Hoje</p>
         </LogoHoje>
         <p>Histórico</p>
       </Footer>
-    </HabitsFull>
+    </TodayFull>
   );
 }
 
-const HabitsFull = styled.div`
+const TodayFull = styled.div`
   background-color: #e5e5e5;
   height: 747px;
   font-family: "Lexend Deca", sans-serif;
 `;
+
+
 
 const Main = styled.div`
   display: flex;
@@ -71,6 +67,54 @@ const Main = styled.div`
     color: #666666;
     margin: 29px 18px;
     line-height: 22px;
+  }
+`;
+
+const Header = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 28px 18px;
+
+  h2 {
+    font-size: 23px;
+    color: #126ba5;
+  }
+`;
+
+const ContainerHabits = styled.div`
+  width: 340px;
+  height: 91px;
+  background-color: #ffffff;
+  margin: 0px auto 10px;
+  border-radius: 5px;
+  display: flex;
+`;
+
+const ContainerCheck = styled.div`
+  width: 69px;
+  height: 69px;
+  background-color: #e7e7e7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  color: #ffffff;
+  margin: auto 0px auto 32px;
+`;
+
+const HabitAndStatus = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  h3 {
+    font-size: 20px;
+    color: #666666;
+    margin: 15px 0px 8px 20px;
+  }
+
+  h4 {
+    font-size: 20px;
+    color: #666666;
   }
 `;
 
