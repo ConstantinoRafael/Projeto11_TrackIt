@@ -2,15 +2,15 @@ import styled from "styled-components";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useUser } from "../context/User";
-import { GoTrashcan } from "react-icons/go";
+import { BsTrash } from "react-icons/bs";
 
 const weakdays = ["D", "S", "T", "Q", "Q", "S", "S"];
 
 function Days({ w, i, days }) {
   if (days.includes(i)) {
-    return <SelectedDay>{w}</SelectedDay>;
+    return <SelectedDay data-identifier="week-day-btn">{w}</SelectedDay>;
   } else {
-    return <NotSelectedDay>{w}</NotSelectedDay>;
+    return <NotSelectedDay data-identifier="week-day-btn">{w}</NotSelectedDay>;
   }
 }
 
@@ -35,8 +35,10 @@ function OneHabit({ id, name, days, user }) {
   return (
     <ContainerHabit>
       <FraseELixeira>
-        <h3>{name}</h3>
-        <GoTrashcan onClick={deleteHabit} />
+        <h3 data-identifier="habit-name">{name}</h3>
+        <div>
+          <BsTrash data-identifier="delete-habit-btn" onClick={deleteHabit} />
+        </div>
       </FraseELixeira>
 
       <ButtonsDays>
@@ -72,8 +74,6 @@ export default function ListHabits() {
     promise.catch((err) => console.log(err.response.data));
   }, [habitsList, user.token]);
 
-  
-
   return (
     <>
       {habitsList.map((h) => (
@@ -88,11 +88,14 @@ export default function ListHabits() {
         />
       ))}
 
-      {habitsList.length === 0 ? <p>
-        Você Não tem nenhum hábito cadastrado ainda. Adicione um hábito para
-        começar a trackear!
-      </p> : ""}
-      
+      {habitsList.length === 0 ? (
+        <p data-identifier="no-habit-message">
+          Você Não tem nenhum hábito cadastrado ainda. Adicione um hábito para
+          começar a trackear!
+        </p>
+      ) : (
+        ""
+      )}
     </>
   );
 }
@@ -113,6 +116,13 @@ const ContainerHabit = styled.div`
 
 const FraseELixeira = styled.div`
   display: flex;
+  justify-content: space-between;
+
+  div {
+    font-size: 20px;
+    color: #666666;
+    margin: 10px;
+  }
 `;
 
 const ButtonsDays = styled.div`

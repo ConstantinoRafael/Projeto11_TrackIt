@@ -10,7 +10,7 @@ export default function HeaderHabits({createNewHabit, setCreateNewHabit}) {
   return (
     <MhAndButton>
       <h2>Meus hábitos</h2>
-      <button onClick={showBoxNewHabit}>+</button>
+      <button data-identifier="create-habit-btn" onClick={showBoxNewHabit}>+</button>
     </MhAndButton>
   );
 }

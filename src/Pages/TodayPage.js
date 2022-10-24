@@ -1,20 +1,28 @@
 import styled from "styled-components";
-import bolaAzul from "../assets/Images/BolaAzul.png";
-import parteBranca from "../assets/Images/Vector.png";
 
 import { useUser } from "../context/User";
 import { Link } from "react-router-dom";
 import NavBar from "../Components/NavBar";
 import dayjs from "dayjs";
 import ListToday from "../Components/ListToday";
+import { useProgress } from "../context/Progress";
 
-const weekDays = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"]
+import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+
+const weekDays = [
+  "Domingo",
+  "Segunda",
+  "Terça",
+  "Quarta",
+  "Quinta",
+  "Sexta",
+  "Sábado",
+];
 
 export default function HabitsPage() {
   const { user, setUser } = useUser(undefined);
-
-  
-
+  const { progress } = useProgress(undefined);
 
   return (
     <TodayFull>
@@ -22,28 +30,43 @@ export default function HabitsPage() {
 
       <Main>
         <Header>
-          <h2>{weekDays[dayjs().day()]}, {dayjs().format("DD/MM")}</h2>
-          <p>Nenhum hábito concluído ainda</p>
+          <h2 data-identifier="today-infos">
+            {weekDays[dayjs().day()]}, {dayjs().format("DD/MM")}
+          </h2>
+
+          {progress === 0 ? (
+            <p data-identifier="today-infos">Nenhum hábito concluído ainda</p>
+          ) : (
+            <h5 data-identifier="today-infos">
+              {progress}% dos hábitos concluídos
+            </h5>
+          )}
         </Header>
-
         <ListToday />
-
-        
       </Main>
 
       <Footer>
         <Link to={"/habitos"}>
-
-        <p>Hábitos</p>
+          <p data-identifier="habit-page-action">Hábitos</p>
         </Link>
-        
-        <LogoHoje>
-          <BolaAzul src={bolaAzul} alt="bola azul" />
 
-          <ParteBranca src={parteBranca} alt="parte branca" />
-          <p>Hoje</p>
+        <LogoHoje>
+          <CircularProgressbar
+            value={progress}
+            text={`Hoje`}
+            background
+            backgroundPadding={6}
+            styles={buildStyles({
+              backgroundColor: "#52b6ff",
+              textColor: "#fff",
+              pathColor: "#fff",
+              trailColor: "transparent",
+            })}
+          />
         </LogoHoje>
-        <p>Histórico</p>
+        <Link data-identifier="historic-page-action" to={"/historico"}>
+          <p>Histórico</p>
+        </Link>
       </Footer>
     </TodayFull>
   );
@@ -55,8 +78,6 @@ const TodayFull = styled.div`
   font-family: "Lexend Deca", sans-serif;
 `;
 
-
-
 const Main = styled.div`
   display: flex;
   flex-direction: column;
@@ -65,6 +86,13 @@ const Main = styled.div`
   p {
     font-size: 18px;
     color: #666666;
+    margin: 29px 18px;
+    line-height: 22px;
+  }
+
+  h5 {
+    font-size: 18px;
+    color: #8fc549;
     margin: 29px 18px;
     line-height: 22px;
   }
@@ -81,43 +109,6 @@ const Header = styled.div`
   }
 `;
 
-const ContainerHabits = styled.div`
-  width: 340px;
-  height: 91px;
-  background-color: #ffffff;
-  margin: 0px auto 10px;
-  border-radius: 5px;
-  display: flex;
-`;
-
-const ContainerCheck = styled.div`
-  width: 69px;
-  height: 69px;
-  background-color: #e7e7e7;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 40px;
-  color: #ffffff;
-  margin: auto 0px auto 32px;
-`;
-
-const HabitAndStatus = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  h3 {
-    font-size: 20px;
-    color: #666666;
-    margin: 15px 0px 8px 20px;
-  }
-
-  h4 {
-    font-size: 20px;
-    color: #666666;
-  }
-`;
-
 const Footer = styled.div`
   width: auto;
   height: 70px;
@@ -130,6 +121,10 @@ const Footer = styled.div`
   justify-content: space-between;
   align-items: center;
 
+  a {
+    text-decoration: none;
+  }
+
   p {
     font-size: 18px;
     color: #52b6ff;
@@ -139,24 +134,12 @@ const Footer = styled.div`
 `;
 
 const LogoHoje = styled.div`
-  position: relative;
-  left: -40px;
-  bottom: -30px;
+  background-color: #52b6ff;
+  width: 91px;
+  height: 91px;
+  border-radius: 46px;
+  margin-bottom: 50px;
   display: flex;
-
-  p {
-    position: absolute;
-    bottom: 70px;
-    color: #ffffff;
-  }
-`;
-
-const BolaAzul = styled.img`
-  position: absolute;
-  bottom: 25px;
-`;
-const ParteBranca = styled.img`
-  position: absolute;
-  bottom: 31px;
-  left: 15px;
+  justify-content: center;
+  align-items: center;
 `;

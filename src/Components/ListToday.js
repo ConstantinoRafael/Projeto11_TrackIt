@@ -3,6 +3,7 @@ import { GoCheck } from "react-icons/go";
 import axios from "axios";
 import { useUser } from "../context/User";
 import { useEffect, useState } from "react";
+import { useProgress } from "../context/Progress";
 
 function OneHabitToday({
   user,
@@ -11,16 +12,10 @@ function OneHabitToday({
   currentSequence,
   highestSequence,
   done,
+  checked,
   setChecked,
 }) {
   function checkHabit() {
-    const body = {
-      id: id,
-      name: name,
-      currentSequence: currentSequence,
-      highestSequence: highestSequence,
-    }
-
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -31,23 +26,21 @@ function OneHabitToday({
 
     const promise = axios.post(
       `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/check`,
-      body,
+      id,
       config
     );
 
-    promise.then((res) => setChecked(true));
+    promise.then((res) => {
+      checked === true ? setChecked(false) : setChecked(true);
+    });
 
     promise.catch((err) => console.log("nao marcou"));
+
+    setChecked(false);
   }
+  console.log("to aqui");
 
   function uncheckHabit() {
-    const body = {
-      id: id,
-      name: name,
-      currentSequence: currentSequence,
-      highestSequence: highestSequence,
-    }
-
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -58,29 +51,34 @@ function OneHabitToday({
 
     const promise = axios.post(
       `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/uncheck`,
-      body,
+      id,
       config
     );
 
-    promise.then((res) => setChecked(false));
+    promise.then((res) =>
+      checked === true ? setChecked(false) : setChecked(true)
+    );
 
     promise.catch((err) => console.log("nao marcou"));
   }
 
   return (
-    <ContainerHabits>
+    <ContainerHabits data-identifier="today-infos">
       <HabitAndStatus>
         <h3>{name}</h3>
-        <h4>Sequência atual:{currentSequence} dias</h4>
-        <h4>Seu recorde:{highestSequence} dias</h4>
+        <h4>Sequência atual: {currentSequence} dias</h4>
+        <h4>Seu recorde: {highestSequence} dias</h4>
       </HabitAndStatus>
 
       {done === false ? (
-        <ContainerCheck onClick={checkHabit}>
+        <ContainerCheck data-identifier="done-habit-btn" onClick={checkHabit}>
           <GoCheck />
         </ContainerCheck>
       ) : (
-        <ContainerCheckGreen onClick={uncheckHabit}>
+        <ContainerCheckGreen
+          data-identifier="done-habit-btn"
+          onClick={uncheckHabit}
+        >
           <GoCheck />
         </ContainerCheckGreen>
       )}
@@ -91,7 +89,8 @@ function OneHabitToday({
 export default function ListToday() {
   const { user, setUser } = useUser(undefined);
   const [todayHabitsList, setTodayHabitsList] = useState([]);
-  const [checked , setChecked ] = useState(false)
+  const [checked, setChecked] = useState(false);
+  const { progress, setProgress } = useProgress();
 
   useEffect(() => {
     const config = {
@@ -111,7 +110,17 @@ export default function ListToday() {
     });
 
     promise.catch((err) => console.log(err.response.data));
-  }, [checked, user.token]);
+  }, [checked, user.token, progress]);
+
+  if (todayHabitsList.length === 0) {
+    setProgress(0);
+  } else {
+    const arrayDone = todayHabitsList.filter((t) => t.done === true);
+
+    const newProgress = (arrayDone.length / todayHabitsList.length) * 100;
+
+    setProgress(newProgress);
+  }
 
   return (
     <>
@@ -139,6 +148,7 @@ const ContainerHabits = styled.div`
   margin: 0px auto 10px;
   border-radius: 5px;
   display: flex;
+  justify-content: space-between;
 `;
 
 const ContainerCheck = styled.div`
@@ -150,7 +160,7 @@ const ContainerCheck = styled.div`
   align-items: center;
   font-size: 40px;
   color: #ffffff;
-  margin: auto 0px auto 32px;
+  margin: auto 10px auto 32px;
   border-radius: 5px;
 `;
 
@@ -163,7 +173,7 @@ const ContainerCheckGreen = styled.div`
   align-items: center;
   font-size: 40px;
   color: #ffffff;
-  margin: auto 0px auto 32px;
+  margin: auto 10px auto 32px;
   border-radius: 5px;
 `;
 
@@ -178,7 +188,8 @@ const HabitAndStatus = styled.div`
   }
 
   h4 {
-    font-size: 20px;
+    font-size: 13px;
     color: #666666;
+    margin-left: 20px;
   }
 `;

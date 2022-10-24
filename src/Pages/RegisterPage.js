@@ -2,9 +2,8 @@ import styled from "styled-components";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-//import { ThreeDots } from "react-loader-spinner";
-//import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { Link } from "react-router-dom";
+import logo from "../assets/Images/Logo.png";
 
 export default function LoginPage() {
   const [email, setEmail] = useState(undefined);
@@ -35,30 +34,39 @@ export default function LoginPage() {
 
   return (
     <Login>
-      <Logo>TrackIt</Logo>
+      <Logo>
+        <img src={logo} alt="imagem do logo" />
+      </Logo>
       <Form onSubmit={sendData}>
         <Input
+          data-identifier="input-email"
           placeholder="email"
+          type="email"
           onChange={(e) => setEmail(e.target.value)}
         ></Input>
         <Input
+          data-identifier="input-password"
           placeholder="senha"
+          type="password"
           onChange={(e) => setPassword(e.target.value)}
         ></Input>
         <Input
+          data-identifier="input-name"
           placeholder="nome"
+          type="text"
           onChange={(e) => setName(e.target.value)}
         ></Input>
         <Input
+          data-identifier="input-photo"
           placeholder="foto"
+          type="url"
           onChange={(e) => setImage(e.target.value)}
         ></Input>
         <Button type="submit">Cadastrar</Button>
       </Form>
-      <Link to={"/"}>
+      <Link data-identifier="back-to-login-action" to={"/"}>
         <p>Já tem uma conta? Faça login!</p>
       </Link>
-      
     </Login>
   );
 }
@@ -70,12 +78,12 @@ const Login = styled.div`
   align-items: center;
   font-family: "Lexend Deca", sans-serif;
 
-  a{
-    text-decoration-color:#52b6ff;
+  a {
+    text-decoration-color: #52b6ff;
   }
 
-  p{
-    color:#52b6ff;
+  p {
+    color: #52b6ff;
     margin-top: 20px;
   }
 `;
@@ -93,7 +101,6 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
 `;
-
 
 const Input = styled.input`
   width: 303px;

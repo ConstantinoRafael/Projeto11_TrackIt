@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/User";
+import logo from "../assets/Images/Logo.png";
 
 export default function LoginPage() {
-  const { user, setUser } = useUser(undefined);
+  const { setUser } = useUser(undefined);
 
   const [email, setEmail] = useState(undefined);
   const [password, setPassword] = useState(undefined);
@@ -34,23 +35,30 @@ export default function LoginPage() {
     promise.catch((err) => console.log("deu erroooo"));
   }
 
+
   return (
     <Login>
-      <Logo>TrackIt</Logo>
+      <Logo>
+        <img src={logo} alt="imagem do logo" />
+      </Logo>
       <Form onSubmit={sendData}>
         <Input
+          data-identifier="input-email"
           placeholder="email"
           type="email"
           onChange={(e) => setEmail(e.target.value)}
         ></Input>
         <Input
+          data-identifier="input-password"
           placeholder="senha"
           type="password"
           onChange={(e) => setPassword(e.target.value)}
         ></Input>
-        <Button type="submit">Entrar</Button>
+        <Button data-identifier="login-btn" type="submit">
+          Entrar
+        </Button>
       </Form>
-      <Link to={"/cadastro"}>
+      <Link data-identifier="sign-up-action" to={"/cadastro"}>
         <p>Não tem uma conta? Cadastre-se!</p>
       </Link>
     </Login>

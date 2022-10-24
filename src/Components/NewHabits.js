@@ -7,9 +7,9 @@ const weakdays = ["D", "S", "T", "Q", "Q", "S", "S"];
 
 function Days({ w, i, selects, setSelects }) {
   if (selects.includes(i)) {
-    return <SelectedDay onClick={selectDay}>{w}</SelectedDay>;
+    return <SelectedDay data-identifier="week-day-btn" onClick={selectDay}>{w}</SelectedDay>;
   } else {
-    return <NotSelectedDay onClick={selectDay}>{w}</NotSelectedDay>;
+    return <NotSelectedDay data-identifier="week-day-btn" onClick={selectDay}>{w}</NotSelectedDay>;
   }
 
   function selectDay() {
@@ -67,6 +67,7 @@ export default function NewHabits({
     <ContainerNewHabit>
       <form onSubmit={sendData}>
         <input
+          data-identifier="input-habit-name"
           placeholder="nome do hábito"
           type="text"
           onChange={(e) => setHabitName(e.target.value)}
@@ -83,8 +84,8 @@ export default function NewHabits({
           ))}
         </ButtonsDays>
         <ButtonsCancelarSalvar>
-          <Cancelar onClick={hideBoxNewHabit}>Cancelar</Cancelar>
-          <Salvar type="submit">Salvar</Salvar>
+          <Cancelar data-identifier="cancel-habit-create-btn" onClick={hideBoxNewHabit}>Cancelar</Cancelar>
+          <Salvar data-identifier="save-habit-create-btn" type="submit">Salvar</Salvar>
         </ButtonsCancelarSalvar>
       </form>
     </ContainerNewHabit>

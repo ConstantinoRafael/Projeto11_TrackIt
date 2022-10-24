@@ -1,47 +1,30 @@
 import styled from "styled-components";
-import { useUser } from "../context/User";
 import NavBar from "../Components/NavBar";
-import HeaderHabits from "../Components/HeaderHabits";
-import NewHabits from "../Components/NewHabits";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import ListHabits from "../Components/ListHabits";
-import { Link } from "react-router-dom";
 import { useProgress } from "../context/Progress";
+import { Link } from "react-router-dom";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
-export default function HabitsPage() {
-  const [createNewHabit, setCreateNewHabit] = useState(false);
-  const [habitsList, setHabitList] = useState([]);
-  const { progress } = useProgress(undefined);
+export default function HistoryPage() {
+  const { progress } = useProgress();
 
   return (
-    <HabitsFull>
+    <HistoryFull>
       <NavBar />
 
       <Main>
-        <HeaderHabits
-          createNewHabit={createNewHabit}
-          setCreateNewHabit={setCreateNewHabit}
-        />
+        <Header>
+          <h2 data-identifier="today-infos">Histórico</h2>
 
-        {createNewHabit === true ? (
-          <NewHabits
-            createNewHabit={createNewHabit}
-            setCreateNewHabit={setCreateNewHabit}
-            habitsList={habitsList}
-            setHabitList={setHabitList}
-          />
-        ) : (
-          ""
-        )}
-
-        <ListHabits />
+          <p>Em breve você poderá ver o histórico dos seus hábitos aqui!</p>
+        </Header>
       </Main>
 
       <Footer>
-        <p data-identifier="habit-page-action">Hábitos</p>
+        <Link to={"/habitos"}>
+          <p data-identifier="habit-page-action">Hábitos</p>
+        </Link>
+
         <LogoHoje>
           <Link to={"/hoje"}>
             <CircularProgressbar
@@ -59,14 +42,14 @@ export default function HabitsPage() {
           </Link>
         </LogoHoje>
         <Link data-identifier="historic-page-action" to={"/historico"}>
-          <p>Histórico</p>
+          <p data-identifier="historic-page-action">Histórico</p>
         </Link>
       </Footer>
-    </HabitsFull>
+    </HistoryFull>
   );
 }
 
-const HabitsFull = styled.div`
+const HistoryFull = styled.div`
   background-color: #e5e5e5;
   height: 747px;
   font-family: "Lexend Deca", sans-serif;
@@ -85,6 +68,17 @@ const Main = styled.div`
   }
 `;
 
+const Header = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 28px 18px;
+
+  h2 {
+    font-size: 23px;
+    color: #126ba5;
+  }
+`;
+
 const Footer = styled.div`
   width: auto;
   height: 70px;
@@ -97,7 +91,7 @@ const Footer = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  a{
+  a {
     text-decoration: none;
   }
 
