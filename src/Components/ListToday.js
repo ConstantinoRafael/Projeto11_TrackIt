@@ -87,7 +87,7 @@ function OneHabitToday({
 }
 
 export default function ListToday() {
-  const { user, setUser } = useUser(undefined);
+  const { user } = useUser(undefined);
   const [todayHabitsList, setTodayHabitsList] = useState([]);
   const [checked, setChecked] = useState(false);
   const { progress, setProgress } = useProgress();

@@ -1,6 +1,4 @@
 import styled from "styled-components";
-
-import { useUser } from "../context/User";
 import { Link } from "react-router-dom";
 import NavBar from "../Components/NavBar";
 import dayjs from "dayjs";
@@ -21,7 +19,6 @@ const weekDays = [
 ];
 
 export default function HabitsPage() {
-  const { user, setUser } = useUser(undefined);
   const { progress } = useProgress(undefined);
 
   return (
